@@ -1,6 +1,6 @@
 # Wolf3D
 The project is about recreating Wolfenstein 3D game from scratch and to get familiar with Ray-Casting principles.
-This is just a basic version of the game with just the wall collision.
+This is just a basic version of the game with just the wall collision function.
 
 How to run:
 
