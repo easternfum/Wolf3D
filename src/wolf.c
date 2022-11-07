@@ -92,7 +92,6 @@ int	main(int ac, char **av)
 {
 	t_wolf	maze;
 
-	(void)av;
 	if (ac == 2)
 	{
 		check_map(&maze, av[1]);
