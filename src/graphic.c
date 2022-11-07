@@ -6,7 +6,7 @@
 /*   By: kfum <kfum@student.hive.fi>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 13:18:26 by kfum              #+#    #+#             */
-/*   Updated: 2022/10/06 16:12:22 by kfum             ###   ########.fr       */
+/*   Updated: 2022/11/07 13:28:35 by kfum             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	init_color(t_wolf *maze, int x, int y, int color)
 	if ((x > 0 && x < WIDTH) && (y > 0 && y < HEIGHT))
 	{
 		graph = mlx_get_data_addr(maze->graphic, &g, &g, &g);
+		if (!graph)
+			print_msg(ERR_INIT);
 		g = WIDTH * y * 4 + x * 4;
 		graph[g + 0] = (int)((color >> 16) & 0xFF);
 		graph[g + 1] = (int)((color >> 8) & 0xFF);
@@ -86,8 +88,8 @@ void	insert_texture(t_wolf *maze, int x)
 	maze->ray.text_x = (int)(maze->ray.wall * (double)(maze->t_w[0]));
 	while (maze->start != maze->end)
 	{
-		maze->dist = maze->start * 256 - HEIGHT * 128 + maze->ray.wall_height
-			* 128;
+		maze->dist = (maze->start * 256 + 5) - HEIGHT * 128
+			+ maze->ray.wall_height * 128;
 		maze->ray.text_y = ((maze->dist * maze->t_h[0]) / maze->ray.wall_height)
 			/ 256;
 		maze->color = maze->texture[0][maze->t_h[0] * maze->ray.text_y
@@ -109,11 +111,23 @@ void	xpm_file(t_wolf *maze)
 	int		b;
 
 	maze->mlx = mlx_init();
+	if (!maze->mlx)
+		print_msg(ERR_INIT);
 	maze->window = mlx_new_window(maze->mlx, WIDTH, HEIGHT, WOLF);
+	if (!maze->window)
+		print_msg(ERR_INIT);
 	maze->graphic = mlx_new_image(maze->mlx, WIDTH, HEIGHT);
+	if (!maze->graphic)
+		print_msg(ERR_INIT);
 	maze->texture = (int **)malloc(sizeof(int *) * 1);
+	if (!maze->texture)
+		print_msg(ERR_INIT);
 	temp = mlx_xpm_file_to_image(maze->mlx, "texture/wall.xpm",
-			&(maze->t_h[0]), &(maze->t_w[0]));
+			&(maze->t_w[0]), &(maze->t_h[0]));
 	maze->texture[0] = (int *)mlx_get_data_addr(temp, &b, &b, &b);
+	if (!maze->texture[0])
+		print_msg(ERR_INIT);
 	maze->data = (int *)mlx_get_data_addr(maze->graphic, &b, &b, &b);
+	if (!maze->data)
+		print_msg(ERR_INIT);
 }
